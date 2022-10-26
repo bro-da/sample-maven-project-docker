@@ -22,29 +22,7 @@ pipeline {
                 sh 'mvn -B -DskipTests clean package'
             }
         }
-        stage('Test') {
-            steps {
-                sh 'mvn test'
-            }
-            post {
-                always {
-                    junit 'target/surefire-reports/*.xml'
-                }
-            }
-        }
-        stage('Deliver') { 
-            steps {
-                sh './jenkins/scripts/deliver.sh' 
-            }
-        }
-       
-            stage('Login') {
-
-			steps {
-				sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
-			}
-		}
-         stage('Docker') {
+         stage('Docker build') {
             steps {
                 script {
                 // sh 'docker rmi maven-sample'
@@ -54,6 +32,15 @@ pipeline {
                 }
              }
             }
+        
+       
+            stage('Login') {
+
+			steps {
+				sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+			}
+		}
+        
         stage('Push') {
             
 			steps {
@@ -65,6 +52,15 @@ pipeline {
 				
 			}
 		}
+        stage('Helm Push ') {
+                steps {
+                    sh 'echo version : 0.${BUILD_NUMBER}.0 >> mavenhelm/Chart.yaml'
+                    sh 'helm package mavenhelm'
+                    sh 'aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/l2m3f3d0'
+                    // sh 'helm push helm-maven-0.${BUILD_NUMBER}.0.tgz oci://182203249444.dkr.ecr.us-west-2.amazonaws.com/'
+                    sh 'rm -rf helm-maven-*'
+                    }
+            }
 	}
 
 	post {
@@ -72,13 +68,6 @@ pipeline {
 			sh 'docker logout'
 		}
 	}
-        // stage('Docker Build') {
-        //     steps {
-        //         script {
-        //             docker.build("vivans/sample-build:${TAG}")
-        //         }
-        //     }
-        // }
-
+        
     }
     
