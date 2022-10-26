@@ -26,7 +26,7 @@ pipeline {
             steps {
                 script {
                 // sh 'docker rmi maven-sample'
-                sh 'docker build -t vivans/sample-build:${TAG} .'
+                sh 'docker build -t sample-maven-project-docker:${BUILD_NUMBER} .'
                 
                 sh 'docker images'
                 }
@@ -37,7 +37,8 @@ pipeline {
             stage('Login') {
 
 			steps {
-				sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+				// sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+                 sh 'aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/l2m3f3d0'
 			}
 		}
         
@@ -46,9 +47,10 @@ pipeline {
 			steps {
 //                  sh 'docker push vivans/sample-build:"${BUILD_NUMBER}"'
 //                 sh 'docker tag vivans/sample-build:${BUILD.NUMBER} vivans/sample-build:latest'
-				sh 'docker tag vivans/sample-build:${TAG} vivans/sample-build:latest'
-				sh 'docker push vivans/sample-build:${TAG}'
-				sh 'docker push vivans/sample-build:latest'
+				// sh 'docker tag vivans/sample-build:${BUILD_NUMBER} vivans/sample-build:latest'
+                sh 'docker tag sample-maven-project-docker:${BUILD_NUMBER} public.ecr.aws/l2m3f3d0/sample-maven-project-docker:${BUILD_NUMBER}'
+				sh 'docker push sample-maven-project-docker:${BUILD_NUMBER}'
+				sh 'docker push sample-maven-project-docker:${BUILD_NUMBER}'
 				
 			}
 		}
@@ -56,7 +58,7 @@ pipeline {
                 steps {
                     sh 'echo version : 0.${BUILD_NUMBER}.0 >> mavenhelm/Chart.yaml'
                     sh 'helm package mavenhelm'
-                    sh 'aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/l2m3f3d0'
+                    // sh 'aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/l2m3f3d0'
                     // sh 'helm push helm-maven-0.${BUILD_NUMBER}.0.tgz oci://182203249444.dkr.ecr.us-west-2.amazonaws.com/'
                     sh 'rm -rf helm-maven-*'
                     }
