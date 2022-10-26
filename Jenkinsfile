@@ -49,8 +49,8 @@ pipeline {
 //                 sh 'docker tag vivans/sample-build:${BUILD.NUMBER} vivans/sample-build:latest'
 				// sh 'docker tag vivans/sample-build:${BUILD_NUMBER} vivans/sample-build:latest'
                 sh 'docker tag sample-maven-project-docker:${BUILD_NUMBER} public.ecr.aws/l2m3f3d0/sample-maven-project-docker:${BUILD_NUMBER}'
-				sh 'docker push sample-maven-project-docker:${BUILD_NUMBER}'
-				sh 'docker push sample-maven-project-docker:${BUILD_NUMBER}'
+				// sh 'docker push sample-maven-project-docker:${BUILD_NUMBER}'
+				sh 'docker push public.ecr.aws/l2m3f3d0/sample-maven-project-docker:latest'
 				
 			}
 		}
