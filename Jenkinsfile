@@ -56,6 +56,7 @@ pipeline {
 		}
         stage('Helm Push ') {
                 steps {
+                    sh 'helm create mavenhelm'
                     sh 'echo version : 0.${BUILD_NUMBER}.0 >> mavenhelm/Chart.yaml'
                     sh 'helm package mavenhelm'
                     // sh 'aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/l2m3f3d0'
