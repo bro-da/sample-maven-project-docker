@@ -22,7 +22,34 @@ pipeline {
                 sh 'mvn -B -DskipTests clean package'
             }
         }
-         stage('Docker build') {
+        //  stage('Docker build') {
+        //     steps {
+        //         script {
+        //         // sh 'docker rmi maven-sample'
+        //         sh 'docker build -t sample-maven-project-docker:${BUILD_NUMBER} .'
+                
+        //         sh 'docker images'
+        //         }
+        //      }
+        //     }
+        
+       
+            
+        stage('Helm Push ') {
+                steps {
+                    sh 'helm create mavenhelm'
+                    sh 'rm -rf ./mavenhelm/templates/*'
+                    sh 'ls -al'
+                    // sh 'echo version : 0.${BUILD_NUMBER}.0 >> mavenhelm/Chart.yaml'
+                    sh 'sed -i "s/tag: ""/tag: "$BUILD_NUMBER"/g" mavenhelm/values.yaml'
+                    sh 'sed -i "s/type: ClusterIP/type: NodePort/g" mavenhelm/values.yaml'
+                    sh 'helm package mavenhelm'
+                    // sh 'aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/l2m3f3d0'
+                    // sh 'helm push helm-maven-0.${BUILD_NUMBER}.0.tgz oci://182203249444.dkr.ecr.us-west-2.amazonaws.com/'
+                    
+                    }
+            }
+            stage('Docker build') {
             steps {
                 script {
                 // sh 'docker rmi maven-sample'
@@ -32,8 +59,6 @@ pipeline {
                 }
              }
             }
-        
-       
             stage('Login') {
 
 			steps {
@@ -51,22 +76,10 @@ pipeline {
                 sh 'docker tag sample-maven-project-docker:${BUILD_NUMBER} public.ecr.aws/l2m3f3d0/sample-maven-project-docker:latest'
 				sh 'docker push public.ecr.aws/l2m3f3d0/sample-maven-project-docker:latest'
 				sh 'docker push public.ecr.aws/l2m3f3d0/sample-maven-project-docker:latest'
+                sh 'rm -rf helm-maven-*'
 				
 			}
 		}
-        stage('Helm Push ') {
-                steps {
-                    sh 'helm create mavenhelm'
-                    sh 'pwd'
-                    sh 'ls -al'
-                    // sh 'echo version : 0.${BUILD_NUMBER}.0 >> mavenhelm/Chart.yaml'
-                    sh 'sed -i "s/tag: ""/tag: "$USER"/g" mavenhelm/values.yaml'
-                    sh 'helm package mavenhelm'
-                    // sh 'aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/l2m3f3d0'
-                    // sh 'helm push helm-maven-0.${BUILD_NUMBER}.0.tgz oci://182203249444.dkr.ecr.us-west-2.amazonaws.com/'
-                    sh 'rm -rf helm-maven-*'
-                    }
-            }
 	}
 
 	post {

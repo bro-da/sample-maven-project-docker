@@ -8,4 +8,5 @@ ADD . $HOME
 
 FROM openjdk:8-jdk-alpine 
 COPY --from=build /usr/app/target/my-app-1.0-SNAPSHOT.jar /app/runner.jar
+# COPY mavenhelm -* /app/mavenhelm.tgz
 ENTRYPOINT java -jar /app/runner.jar
