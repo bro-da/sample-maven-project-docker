@@ -60,7 +60,7 @@ pipeline {
                     sh 'pwd'
                     sh 'ls -al'
                     // sh 'echo version : 0.${BUILD_NUMBER}.0 >> mavenhelm/Chart.yaml'
-                    sh 'sed -i "s/tag:""/tag:$BUILD_NUMBER/g" helmmaven/values.yaml'
+                    sh 'sed -i "s/tag:""/tag:$BUILD_NUMBER/g" mavenhelm/values.yaml'
                     sh 'helm package mavenhelm'
                     // sh 'aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/l2m3f3d0'
                     // sh 'helm push helm-maven-0.${BUILD_NUMBER}.0.tgz oci://182203249444.dkr.ecr.us-west-2.amazonaws.com/'
