@@ -4,7 +4,7 @@ pipeline {
      environment {
         DATE = new Date().format('yy.M')
         TAG = "${DATE}.${BUILD_NUMBER}"
-        DOCKERHUB_CREDENTIALS=credentials('dockerhub')
+        // DOCKERHUB_CREDENTIALS=credentials('dockerhub')
     }
     options {
         skipStagesAfterUnstable()
