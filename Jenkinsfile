@@ -17,11 +17,11 @@ pipeline {
  
       }
     }
-        stage('Build') {
-            steps {
-                sh 'mvn -B -DskipTests clean package'
-            }
-        }
+        // stage('Build') {
+        //     steps {
+        //         sh 'mvn -B -DskipTests clean package'
+        //     }
+        // }
         //  stage('Docker build') {
         //     steps {
         //         script {
@@ -74,7 +74,7 @@ pipeline {
 //                 sh 'docker tag vivans/sample-build:${BUILD.NUMBER} vivans/sample-build:latest'
 				// sh 'docker tag vivans/sample-build:${BUILD_NUMBER} vivans/sample-build:latest'
                 sh 'docker tag sample-maven-project-docker:${BUILD_NUMBER} public.ecr.aws/l2m3f3d0/sample-maven-project-docker:latest'
-				sh 'docker push public.ecr.aws/l2m3f3d0/sample-maven-project-docker:latest'
+				sh 'docker push public.ecr.aws/l2m3f3d0/sample-maven-project-docker:${BUILD_NUMBER}'
 				sh 'docker push public.ecr.aws/l2m3f3d0/sample-maven-project-docker:latest'
                 sh 'rm -rf helm-maven-*'
 				
@@ -84,7 +84,7 @@ pipeline {
 
 	post {
 		always {
-			sh 'docker logout'
+			sh 'echo build success'
 		}
 	}
         
