@@ -17,7 +17,7 @@ pipeline {
         stage("Deploy to Minikube") {
             steps {
                 // sh 'helm upgrade --install helm-maven helm-maven'
-                sh 'kubectl get po -A'
+                sh 'minikube kubectl get po -A'
             }
         }
     }
