@@ -69,7 +69,7 @@ pipeline {
             }
              stage('Invoke Build number to Pipeline B') {
                 steps {
-                    build job: 'second', parameters : [[ $class: 'StringParameterValue', name: 'buildnum', value: "${BUILD_NUMBER}"]]
+                    build job: 'sample-maven-project-docker-deployment', parameters : [[ $class: 'StringParameterValue', name: 'buildnum', value: "${BUILD_NUMBER}"]]
                 }
             }
 	}
