@@ -7,6 +7,8 @@ pipeline {
     stages {
         stage("Pull from ECR") {
             steps {
+                sh 'ls -al'
+                sh 'pwd'
                 // sh 'rm -rf helm-maven'
                 // sh 'aws ecr get-login-password --region us-west-2 | helm registry login --username AWS --password-stdin 182203249444.dkr.ecr.us-west-2.amazonaws.com'
                 // sh "helm pull oci://182203249444.dkr.ecr.us-west-2.amazonaws.com/helm-maven --version 0.${params.buildnum}.0 --untar"
@@ -15,6 +17,7 @@ pipeline {
         stage("Deploy to Minikube") {
             steps {
                 // sh 'helm upgrade --install helm-maven helm-maven'
+                sh 'whereis minikube'
             }
         }
     }
