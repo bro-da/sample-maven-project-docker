@@ -67,13 +67,18 @@ pipeline {
                     sh 'rm -rf helm-maven-*'
                     }
             }
+             stage('Invoke Build number to Pipeline B') {
+                steps {
+                    build job: 'second', parameters : [[ $class: 'StringParameterValue', name: 'buildnum', value: "${BUILD_NUMBER}"]]
+                }
+            }
 	}
 
-	post {
-		always {
-			sh 'docker logout'
-		}
-	}
+	// post {
+	// 	always {
+	// 		sh 'docker logout'
+	// 	}
+	// }
         
     }
     
