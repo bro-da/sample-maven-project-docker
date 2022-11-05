@@ -59,7 +59,7 @@ pipeline {
                     sh 'helm create mavenhelm'
                     sh 'pwd'
                     sh 'ls -al'
-                    sh 'echo version : 0.${BUILD_NUMBER}.0 >> helm-maven/Chart.yaml'
+                    sh 'echo version : 0.${BUILD_NUMBER}.0 >> mavenhelm/Chart.yaml'
                     sh 'sed -i "s/tag: ""/tag: "$USER"/g" mavenhelm/values.yaml'
                     sh 'helm package mavenhelm'
                     // sh 'helm tag mavenhelm mavenhelm:${BUILD_NUMBER}'
