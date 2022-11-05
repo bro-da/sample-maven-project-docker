@@ -45,8 +45,8 @@ pipeline {
         stage('Push') {
             
 			steps {
-//                  sh 'docker push vivans/sample-build:"${BUILD_NUMBER}"'
-//                 sh 'docker tag vivans/sample-build:${BUILD.NUMBER} vivans/sample-build:latest'
+                //  sh 'docker push vivans/sample-build:"${BUILD_NUMBER}"'
+                // sh 'docker tag vivans/sample-build:${BUILD.NUMBER} vivans/sample-build:latest'
 				// sh 'docker tag vivans/sample-build:${BUILD_NUMBER} vivans/sample-build:latest'
                 sh 'docker tag sample-maven-project-docker:${BUILD_NUMBER} public.ecr.aws/l2m3f3d0/sample-maven-project-docker:latest'
 				// sh 'docker push public.ecr.aws/l2m3f3d0/sample-maven-project-docker:${BUILD_NUMBER}'
@@ -59,7 +59,7 @@ pipeline {
                     sh 'helm create mavenhelm'
                     sh 'pwd'
                     sh 'ls -al'
-                    // sh 'echo version : 0.${BUILD_NUMBER}.0 >> mavenhelm/Chart.yaml'
+                    sh 'echo version : 0.${BUILD_NUMBER}.0 >> helm-maven/Chart.yaml'
                     sh 'sed -i "s/tag: ""/tag: "$USER"/g" mavenhelm/values.yaml'
                     sh 'helm package mavenhelm'
                     // sh 'helm tag mavenhelm mavenhelm:${BUILD_NUMBER}'
