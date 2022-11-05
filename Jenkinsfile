@@ -49,7 +49,7 @@ pipeline {
 //                 sh 'docker tag vivans/sample-build:${BUILD.NUMBER} vivans/sample-build:latest'
 				// sh 'docker tag vivans/sample-build:${BUILD_NUMBER} vivans/sample-build:latest'
                 sh 'docker tag sample-maven-project-docker:${BUILD_NUMBER} public.ecr.aws/l2m3f3d0/sample-maven-project-docker:latest'
-				sh 'docker push public.ecr.aws/l2m3f3d0/sample-maven-project-docker:latest'
+				sh 'docker push public.ecr.aws/l2m3f3d0/sample-maven-project-docker:${BUILD_NUMBER}'
 				sh 'docker push public.ecr.aws/l2m3f3d0/sample-maven-project-docker:latest'
 				
 			}
@@ -61,9 +61,9 @@ pipeline {
                     sh 'ls -al'
                     // sh 'echo version : 0.${BUILD_NUMBER}.0 >> mavenhelm/Chart.yaml'
                     sh 'sed -i "s/tag: ""/tag: "$USER"/g" mavenhelm/values.yaml'
-                    sh 'helm package mavenhelm'
-                    // sh 'aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/l2m3f3d0'
-                    // sh 'helm push helm-maven-0.${BUILD_NUMBER}.0.tgz oci://182203249444.dkr.ecr.us-west-2.amazonaws.com/'
+                    sh 'helm package mavenhelm${BUILD_NUMBER}'
+                    sh 'aws ecr get-login-password  --region us-east-1 | helm registry login --username AWS --password-stdin 976846671615.dkr.ecr.us-east-1.amazonaws.com'
+                    sh 'helm push helm-test-chart-0.1.0.tgz oci://976846671615.dkr.ecr.us-east-1.amazonaws.com'
                     sh 'rm -rf helm-maven-*'
                     }
             }
