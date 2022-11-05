@@ -16,8 +16,8 @@ pipeline {
          stage("pull helm package") {
             steps {
                 sh 'aws ecr get-login-password --region us-east-1 | helm registry login --username AWS --password-stdin 976846671615.dkr.ecr.us-east-1.amazonaws.com'
-                sh "helm pull oci://976846671615.dkr.ecr.us-east-1.amazonaws.com/mavenhelm--version 0.${params.buildnum}.0  --untar"
-                // sh 'helm install ecr-chart-demo oci://976846671615.dkr.ecr.us-east-1.amazonaws.com/helm-test-chart --version $(params.buildnum)'
+                sh "helm pull oci://976846671615.dkr.ecr.us-east-1.amazonaws.com/mavenhelm --version 0.${params.buildnum}.0  --untar"
+                // sh 'helm install ecr-chart-demo oci://976846671615.dkr.ecr.us-east-1.amazonaws.com/mavenhelm --version $(params.buildnum)'
                 // sh 'minikube kubectl get po -A'
             }
         }
