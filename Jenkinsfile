@@ -61,9 +61,9 @@ pipeline {
                     sh 'ls -al'
                     // sh 'echo version : 0.${BUILD_NUMBER}.0 >> mavenhelm/Chart.yaml'
                     sh 'sed -i "s/tag: ""/tag: "$USER"/g" mavenhelm/values.yaml'
-                    sh 'helm package mavenhelm${BUILD_NUMBER}'
+                    sh 'helm package mavenhelm:${BUILD_NUMBER}'
                     sh 'aws ecr get-login-password  --region us-east-1 | helm registry login --username AWS --password-stdin 976846671615.dkr.ecr.us-east-1.amazonaws.com'
-                    sh 'helm push helm-test-chart-0.1.0.tgz oci://976846671615.dkr.ecr.us-east-1.amazonaws.com'
+                    sh 'helm push mavenhelm-0.${BUILD_NUMBER}.0.tgz oci://976846671615.dkr.ecr.us-east-1.amazonaws.com'
                     sh 'rm -rf helm-maven-*'
                     }
             }
