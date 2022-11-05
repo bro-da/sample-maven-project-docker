@@ -5,7 +5,7 @@ pipeline {
     }
     
     stages {
-        stage("Pull from ECR") {
+        stage("create minikubeR") {
             steps {
                 sh 'minikube start --driver=podman --container-runtime=containerd --force'
                 sh 'pwd'
@@ -23,7 +23,7 @@ pipeline {
         }
         stage("Deploy to Minikube") {
             steps {
-                sh 'helm upgrade --install mavenhelm mavenhelm'
+                sh 'helm upgrade --install mavenhelm --version 0.${params.buildnum}.0 mavenhelm'
                 // sh 'minikube kubectl get po -A'
             }
         }
